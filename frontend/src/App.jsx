@@ -8,7 +8,13 @@ import SampleForm from "./components/SampleForm";
 export const BACKEND_URL = "http://localhost:8000";
 
 function App() {
-  const [audioIds, setAudioIds] = useState(new Set(Array.from({ length: 88 }, (_, index) => 1 + index)));
+  const [audioIds, setAudioIds] = useState(
+    new Set(Array.from({ length: 64 }, (_, index) => 1 + index))
+  );
+  const [sequence, setSequence] = useState(
+    Array.from({ length: 10 }, (_, index) => 30 + index)
+  );
+  const [interval, setInterval] = useState(1000);
 
   const addAudioId = (e) => {
     setAudioIds((prevAudioIds) => new Set([...prevAudioIds, e]));
@@ -16,12 +22,16 @@ function App() {
 
   return (
     <div>
-      <h1>Audio Player App</h1>
+      <h1>Vocal Training App</h1>
 
       {/* ID Request Form */}
-      <SampleForm onFormSubmit={addAudioId} />
+      {/* <SampleForm onFormSubmit={addAudioId} /> */}
       {/* Audio Player */}
-      <AudioPlayer audioIds={[...audioIds]} />
+      <AudioPlayer
+        audioIds={[...audioIds]}
+        sequence={sequence}
+        interval={interval}
+      />
     </div>
   );
 }
