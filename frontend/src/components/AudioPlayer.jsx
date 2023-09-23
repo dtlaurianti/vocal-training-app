@@ -2,84 +2,45 @@ import React from "react";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 
-import { BACKEND_URL } from "../App";
+import AudioPreloader from "./AudioPreloader";
 
-function AudioPlayer({ audioId }) {
-  const [audioBlobURL, setAudioBlobURL] = useState('');
-  const playAudio = async (audioId) => {
-    try {
-      // Make a GET request to fetch the audio file
-      const response = await axios.get(`${BACKEND_URL}/sample/${audioId}`, {
-        responseType: 'blob', // Ensure Axios treats the response as binary data
-      });
-
-      // Create a Blob from the response data
-      const audioBlob = new Blob([response.data], { type: 'audio/wav' });
-
-      // Generate a Blob URL for the Blob object
-      const blobURL = URL.createObjectURL(audioBlob);
-
-      // Set the Blob URL for audio playback
-      setAudioBlobURL(blobURL);
-
-      // Play the audio
-      const audioElement = document.getElementById('audio');
-      audioElement.play();
-
-    } catch (error) {
-      console.error('Axios error:', error);
-    }
-  };
-
-  return (
-    <div>
-      <button onClick={() => playAudio(audioId)}>Play Audio</button>
-      {audioBlobURL && <audio id="audio" controls src={audioBlobURL}></audio>}
-    </div>
-  );
-}
-
-
-export default AudioPlayer;
-
-
-  /*
-  //-----------------------------------------------------
+function AudioPlayer({ audioIds }) {
+  // audioElements will be a hashtable of audio files by id
+  const [audioElements, setAudioElements] = useState({});
+  // preload the audio files
   useEffect(() => {
-    const apiURL = `${BACKEND_URL}/sample/${audioId}`;
-    axios.get(apiURL).then((response) => {
-      if (response.status !== 200) {
-        throw Error("Error getting audio file");
+    async function fetchAudioElements() {
+      try{
+        const audioElements = await AudioPreloader(audioIds);
+        setAudioElements(audioElements);
+      } catch (error) {
+        console.error("Axios error:", error);
       }
-      
-      const blob = await
-
-      setAudioURL(response.data.audio_url);
-
-
-  // play the audio file
-  const playAudio = () => {
-    audioRef.current.play();
+      const audioElements = await AudioPreloader(audioIds);
+      setAudioElements(audioElements);
+    }
+    fetchAudioElements();
+  }, [audioIds]);
+  
+  const playAudio = async (audioId) => {
+    const audioElement = audioElements[audioId];
+    audioElement.play();
   }
 
-  useEffect(() => {
-    audioRef.current.src = audio;
-  }, [audioId]);
+  console.log(audioElements);
 
   return (
     <div>
-      <audio ref={audioRef} controls />
+      <h1>Audio Player</h1>
+      {Object.keys(audioElements).map((index) => (
+        console.log(index, audioElements[index]),
+        <button key={index} onClick={() => playAudio(index)}>
+          Play Audio {parseInt(index)}
+        </button>
+      ))}
     </div>
   );
 
-  return (
-    <div>
-      <audio ref={audioRef} controls>
-        Your browser does not support the audio element.
-      </audio>
-      <button onClick={playAudio}>Play Audio</button>
-    </div>
-  );
 }
-*/
 
+export default AudioPlayer;

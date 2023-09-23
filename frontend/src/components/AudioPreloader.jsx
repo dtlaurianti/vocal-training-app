@@ -1,34 +1,48 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-function AudioPreloader({ audioIds }) {
-    useEffect(() => {
-        const preloadAudio = async () => {
-            for (const audioUrl of audioUrls) {
-                try {
-                    // Fetch the audio file using Axios
-                    const response = await axios.get(audioUrl, {
-                        responseType: 'blob', // Ensure Axios treats the response as binary data
-                    });
+import { BACKEND_URL } from "../App";
 
-                    // Create an <audio> element and set preload="auto"
-                    const audioElement = new Audio();
-                    audioElement.src = URL.createObjectURL(new Blob([response.data]));
-                    audioElement.preload = 'auto';
+async function AudioPreloader(audioIds) {
+  console.log(audioIds);
+  // const audioURLs = audioIds.map((audioId) => `${BACKEND_URL}/sample/${audioId}`);
+  const audioElements = {};
+  for (const audioId of audioIds) {
+    try {
+      // Fetch the audio file using Axios
+      const response = await axios.get(`${BACKEND_URL}/sample/${audioId}`, {
+        responseType: "blob",
+      });
+      if (response.status !== 200) {
+        throw new Error("Error getting audio file");
+      }
+      // Create a Blob from the response data
+      const audioBlob = new Blob([response.data], { type: "audio/wav" });
 
-                    // Append the <audio> element to the document (it will preload in the background)
-                    document.body.appendChild(audioElement);
-                } catch (error) {
-                    console.error('Axios error:', error);
-                }
-            }
-        };
+      // Generate a Blob URL for the Blob object
+      const blobURL = URL.createObjectURL(audioBlob);
 
-    // Call the preloadAudio function when the component mounts
-    preloadAudio();
-}, [audioUrls]);
+      // Play the audio
+      const audioElement = new Audio();
+      audioElement.src = blobURL;
+      audioElement.preload = "auto";
+      audioElements[audioId] = audioElement;
 
-return null; // This component doesn't render anything visible
+      /*
+      // Create an <audio> element and set preload="auto"
+      const audioElement = new Audio();
+      audioElement.src = response.data.audio_url;
+      audioElement.preload = "auto";
+      audioElements[audioId] = audioElement;
+      */
+
+      // Append the <audio> element to the document (it will preload in the background)
+      document.body.appendChild(audioElement);
+    } catch (error) {
+      console.error("Axios error:", error);
+    }
   }
+  return audioElements;
+}
 
 export default AudioPreloader;
