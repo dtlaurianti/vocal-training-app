@@ -14,7 +14,7 @@ function App() {
   const [sequence, setSequence] = useState(
     Array.from({ length: 10 }, (_, index) => 30 + index)
   );
-  const [interval, setInterval] = useState(1000);
+  const [interval, setInterval] = useState(1);
 
   const addAudioId = (e) => {
     setAudioIds((prevAudioIds) => new Set([...prevAudioIds, e]));

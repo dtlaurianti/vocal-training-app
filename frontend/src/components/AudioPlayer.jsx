@@ -33,11 +33,11 @@ function AudioPlayer({ audioIds, sequence, interval }) {
   };
 
   // Use the Web Audio API play an audio buffer
-  const playAudioBuffer = async (audioContext, audioBuffer) => {
+  const playAudioBuffer = async (audioContext, audioBuffer, playTime) => {
     const source = audioContext.createBufferSource();
     source.buffer = audioBuffer;
     source.connect(audioContext.destination);
-    source.start();
+    source.start(playTime);
   };
 
   // play audio files according to sequence and interval
@@ -56,11 +56,12 @@ function AudioPlayer({ audioIds, sequence, interval }) {
       })
     );
 
+    let currentTime = audioContext.currentTime + 1;
     // play the audio files in sequence
     for (let i = 0; i < sequence.length; i++) {
       const audioId = sequence[i];
-      playAudioBuffer(audioContext, audioBuffers[audioId]);
-      await new Promise((resolve) => setTimeout(resolve, interval));
+      playAudioBuffer(audioContext, audioBuffers[audioId], currentTime);
+      currentTime += interval;
     }
   };
 
