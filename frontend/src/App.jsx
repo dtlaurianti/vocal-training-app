@@ -12,7 +12,16 @@ function App() {
     new Set(Array.from({ length: 64 }, (_, index) => 1 + index))
   );
   const [sequence, setSequence] = useState(
-    Array.from({ length: 10 }, (_, index) => 30 + index)
+    [
+      [30, 34, 37],
+      [32, 35, 39],
+      [34, 37, 41],
+      [35, 39, 42],
+      [37, 41, 44],
+      [39, 42, 46],
+      [41, 44, 47],
+      [42, 46, 49],
+    ]
   );
   const [interval, setInterval] = useState(1);
 

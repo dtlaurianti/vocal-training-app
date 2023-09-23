@@ -11,7 +11,7 @@ function AudioPlayer({ audioIds, sequence, interval }) {
 
   // Use the Web Audio API to load an audio file into an audio buffer
   const loadAudioFile = async (audioContext, audioId) => {
-    const response = await AudioPreloader(audioId)
+    const response = await AudioPreloader(audioId);
     console.log(response);
     console.log(response.data);
 
@@ -59,8 +59,10 @@ function AudioPlayer({ audioIds, sequence, interval }) {
     let currentTime = audioContext.currentTime + 1;
     // play the audio files in sequence
     for (let i = 0; i < sequence.length; i++) {
-      const audioId = sequence[i];
-      playAudioBuffer(audioContext, audioBuffers[audioId], currentTime);
+      const notes = sequence[i];
+      notes.forEach((note) => {
+        playAudioBuffer(audioContext, audioBuffers[note], currentTime);
+      });
       currentTime += interval;
     }
   };
