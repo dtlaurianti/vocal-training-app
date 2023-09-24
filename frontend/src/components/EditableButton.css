@@ -1,0 +1,32 @@
+.editable-number {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.editable-field {
+  border: 1px solid #ccc;
+  padding: 5px;
+  width: 50px;
+  outline: none;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.input-field {
+  width: 100px; /* Adjust the width as needed */
+}
+button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.validation-error {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px; /* Adjust as needed */
+  display: block; /* Display as a block element */
+  z-index: 999;
+}

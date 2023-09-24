@@ -1,5 +1,9 @@
 {
     "editor.insertSpaces": true,
     "editer.tabSize": 4,
-    "editor.indentSize": "tabSize"
+    "editor.indentSize": "tabSize",
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.autopep8"
+    },
+    "python.formatting.provider": "none"
 }

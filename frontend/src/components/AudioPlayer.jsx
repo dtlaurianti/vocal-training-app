@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 
 import AudioPreloader from "./AudioPreloader";
 
-function AudioPlayer({ audioIds, sequence, interval }) {
+function AudioPlayer({ audioIds, BPM, sequence }) {
   // audioElements will be a hashtable of audio files by id
   const [audioElements, setAudioElements] = useState({});
   // store the audio context in state
@@ -40,12 +40,12 @@ function AudioPlayer({ audioIds, sequence, interval }) {
     source.start(playTime);
   };
 
-  // play audio files according to sequence and interval
+  // play audio files according to sequence and BPM
   const loadAndPlayAudioFiles = async (
     audioContext,
     audioIds,
     sequence,
-    interval
+    BPM
   ) => {
     const audioBuffers = [];
     // buffer all necessary audio files
@@ -63,7 +63,7 @@ function AudioPlayer({ audioIds, sequence, interval }) {
       notes.forEach((note) => {
         playAudioBuffer(audioContext, audioBuffers[note], currentTime);
       });
-      currentTime += interval;
+      currentTime += 60/BPM;
     }
   };
 
@@ -78,7 +78,7 @@ function AudioPlayer({ audioIds, sequence, interval }) {
 
   const startAudio = () => {
     startAudioContext();
-    loadAndPlayAudioFiles(audioContext, audioIds, sequence, interval);
+    loadAndPlayAudioFiles(audioContext, audioIds, sequence, BPM);
   };
 
   useEffect(() => {
@@ -98,7 +98,7 @@ function AudioPlayer({ audioIds, sequence, interval }) {
 
   return (
     <div>
-      <h1>Audio Player</h1>
+      <div>{sequence.join(', ')}</div>
       <button onClick={startAudio}>Play</button>
     </div>
   );
