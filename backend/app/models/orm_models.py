@@ -4,19 +4,21 @@ from sqlalchemy.orm import DeclarativeBase, relationship, mapped_column
 class Base(DeclarativeBase):
     pass
 
+'''
 class Note(Base):
     __tablename__ = 'notes'
     id = mapped_column(Integer, primary_key=True)
     name_flat = mapped_column(String(2)) # Ab, Bb, etc.
     name_sharp = mapped_column(String(2)) # G#, A#, etc. (enharmonics)
     octave = mapped_column(Integer) # 0-10
-
+'''
+    
 class Scale(Base):
     __tablename__ = 'scales'
     id = mapped_column(Integer, primary_key=True)
     name = mapped_column(String(25))
     abbr = mapped_column(String(10))
-    intervals = mapped_column(String(12)) # wwhwwwh, etc.
+    intervals = mapped_column(String(24)) # M2M2m2M2M2M2m2, etc.
     
 
 class Chord(Base):
