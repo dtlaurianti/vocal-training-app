@@ -11,6 +11,7 @@ import FormRange from "react-bootstrap/FormRange";
 const MIN_BPM = 20;
 const MAX_BPM = 300;
 
+// TODO: pass in the selection options so that our menu is synced to database
 function ExerciseBuilder({ sendBPM, sendScale, sendPattern, sendLow, sendHigh }) {
   const [BPM, setBPM] = useState(120); // Set an initial value
   const [scale, setScale] = useState("Major"); // Set an initial value
@@ -50,7 +51,7 @@ function ExerciseBuilder({ sendBPM, sendScale, sendPattern, sendLow, sendHigh })
         aria-label="Scale"
         onChange={handleScaleChange}>
         <option value="Major">Major</option>
-        <option value="Minor">Minor</option>
+        <option value="Natural Minor">Natural Minor</option>
       </Form.Select>
 
       <Form.Select

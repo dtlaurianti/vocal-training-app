@@ -51,13 +51,13 @@ def compute_interval(scale: str, degree1: int, degree2: int, asc: bool):
     if asc:
         if degree2 < degree1:
             degree2 += len(scale) // 2 # wrap around
-        for i in range(degree1, degree2):
+        for i in range(degree1-1, degree2-1):
             i = i % (len(scale) // 2)
             interval += intervals[scale[2*i:2*i+2]].value
     else:
         if degree2 > degree1:
-            degree2 += len(scale) // 2 # wrap around
-        for i in range(degree2, degree1, -1):
+            degree1 += len(scale) // 2 # wrap around
+        for i in range(degree1-1, degree2-1, -1):
             i = i % (len(scale) // 2)
             interval -= intervals[scale[2*i:2*i+2]].value
     return interval
@@ -71,7 +71,6 @@ def generate_sequence(session: Session, scale: str, pattern: str, start_tonic: s
     # parse the input according to the database mappings
     pattern_degrees = session.query(Pattern).filter(Pattern.name == pattern).first().degrees
     scale_intervals = session.query(Scale).filter(Scale.name == scale).first().intervals
-    print("####", pattern_degrees, scale_intervals)
     # convert the pattern degrees to an array
     pattern_degrees = [pattern_degrees[i:i+2]
                        for i in range(0, len(pattern_degrees), 2)]

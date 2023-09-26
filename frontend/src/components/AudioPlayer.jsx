@@ -12,8 +12,6 @@ function AudioPlayer({ audioIds, BPM, sequence }) {
   // Use the Web Audio API to load an audio file into an audio buffer
   const loadAudioFile = async (audioContext, audioId) => {
     const response = await AudioPreloader(audioId);
-    console.log(response);
-    console.log(response.data);
 
     const audioData = await new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -59,10 +57,8 @@ function AudioPlayer({ audioIds, BPM, sequence }) {
     let currentTime = audioContext.currentTime + 1;
     // play the audio files in sequence
     for (let i = 0; i < sequence.length; i++) {
-      const notes = sequence[i];
-      notes.forEach((note) => {
-        playAudioBuffer(audioContext, audioBuffers[note], currentTime);
-      });
+      const note = sequence[i];
+      playAudioBuffer(audioContext, audioBuffers[note], currentTime);
       currentTime += 60/BPM;
     }
   };
@@ -82,7 +78,6 @@ function AudioPlayer({ audioIds, BPM, sequence }) {
   };
 
   useEffect(() => {
-    console.log("AudioPlayer useEffect");
     // use the Web Audio API to play the audio:w
     const audioContext = new (window.AudioContext ||
       window.webkitAudioContext)();
@@ -98,7 +93,7 @@ function AudioPlayer({ audioIds, BPM, sequence }) {
 
   return (
     <div>
-      <div>{sequence.join(', ')}</div>
+      {/* <div>{sequence.join(', ')}</div> */}
       <button onClick={startAudio}>Play</button>
     </div>
   );

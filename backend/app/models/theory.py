@@ -1,4 +1,4 @@
-# Provides enums for converting music theory notation to numerical values of half steps
+# provides enums for converting music theory notation to numerical values of half steps
 
 from enum import Enum
 
@@ -14,12 +14,14 @@ class note_names(Enum):
     A = 9
     B = 11
 
+
 class note_accidentals(Enum):
-    d = -2 # double flat
-    b = -1 # flat
-    n = 0 # natural
-    s = 1 # sharp
-    x = 2 # double sharp
+    d = -2  # double flat
+    b = -1  # flat
+    n = 0  # natural
+    s = 1  # sharp
+    x = 2  # double sharp
+
 
 class intervals(Enum):
     p1 = 0
@@ -67,7 +69,7 @@ class intervals(Enum):
     d11 = 16
     P11 = 17
     a11 = 18
-    
+
     d12 = 18
     P12 = 19
     a12 = 20

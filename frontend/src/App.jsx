@@ -4,7 +4,6 @@ import "./App.css";
 
 import ExerciseBuilder from "./components/ExerciseBuilder";
 import AudioPlayer from "./components/AudioPlayer";
-import SampleForm from "./components/depr/SampleForm";
 
 export const BACKEND_URL = "http://localhost:8000";
 
@@ -14,7 +13,6 @@ function App() {
   );
 
   const [sequence, setSequence] = useState([]);
-  const [interval, setInterval] = useState(1);
 
   // const addAudioId = (e) => {
   //   setAudioIds((prevAudioIds) => new Set([...prevAudioIds, e]));
@@ -23,7 +21,7 @@ function App() {
   // values recieved from exercise builder
   const [BPM, setBPM] = useState(120);
   const [scale, setScale] = useState("Major");
-  const [pattern, setPattern] = useState("1u3u5d3d1");
+  const [pattern, setPattern] = useState("Arpeggio Up");
   const [low, setLow] = useState("G2");
   const [high, setHigh] = useState("E4");
 
@@ -48,8 +46,8 @@ function App() {
     axios
       .get(`${BACKEND_URL}/sequence/${scale}/${pattern}/${low}/${high}`)
       .then((sequenceResponse) => {
-        setSequence(sequenceResponse.data);
-        console.log("Sequence Response:", sequenceResponse.data);
+        const response = sequenceResponse.data;
+        setSequence(response);
       })
       .catch((error) => {
         // Handle any errors that occurred during the request
