@@ -49,10 +49,16 @@ def compute_note(name: str, accidental: str, octave: int, middle_c: int):
 def compute_interval(scale: str, degree1: int, degree2: int, asc: bool):
     interval = 0
     if asc:
+        if degree2 < degree1:
+            degree2 += len(scale) // 2 # wrap around
         for i in range(degree1, degree2):
+            i = i % (len(scale) // 2)
             interval += intervals[scale[2*i:2*i+2]].value
     else:
+        if degree2 > degree1:
+            degree2 += len(scale) // 2 # wrap around
         for i in range(degree2, degree1, -1):
+            i = i % (len(scale) // 2)
             interval -= intervals[scale[2*i:2*i+2]].value
     return interval
 
