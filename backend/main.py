@@ -33,5 +33,6 @@ def read_sample(sample_id: int):
 
 
 @app.get("/sequence/{scale}/{pattern}/{low}/{high}")
-def read_sequence(scale: str, pattern: str, low: str, high: str):
-    return {"data": sequencer.generate_sequence(scale, pattern, low, high)}
+def read_scale_sequence(scale: str, pattern: str, low: str, high: str):
+    print(sequencer.generate_sequence(scale, pattern, low, high))
+    return sequencer.generate_sequence(scale, pattern, low, high)
