@@ -8,10 +8,6 @@ import AudioPlayer from "./components/AudioPlayer";
 export const BACKEND_URL = "http://localhost:8000";
 
 function App() {
-  const [audioIds, setAudioIds] = useState(
-    new Set(Array.from({ length: 64 }, (_, index) => 1 + index))
-  );
-
   const [sequence, setSequence] = useState([]);
 
   // const addAudioId = (e) => {
@@ -69,7 +65,7 @@ function App() {
         sendLow={receiveLow}
         sendHigh={receiveHigh}
       />
-      <AudioPlayer audioIds={[...audioIds]} BPM={BPM} sequence={sequence} />
+      <AudioPlayer BPM={BPM} sequence={sequence} />
     </div>
   );
 }

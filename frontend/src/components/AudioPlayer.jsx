@@ -3,9 +3,9 @@ import { useState, useEffect } from "react";
 
 import AudioPreloader from "./AudioPreloader";
 
-function AudioPlayer({ audioIds, BPM, sequence }) {
-  // audioElements will be a hashtable of audio files by id
-  const [audioElements, setAudioElements] = useState({});
+function AudioPlayer({ BPM, sequence }) {
+  // manages the starting and stopping of audio playback loops
+  const [processes, setProcesses] = useState([]);
   // store the audio context in state
   const [audioContext, setAudioContext] = useState(null);
 
@@ -41,11 +41,11 @@ function AudioPlayer({ audioIds, BPM, sequence }) {
   // play audio files according to sequence and BPM
   const loadAndPlayAudioFiles = async (
     audioContext,
-    audioIds,
     sequence,
     BPM
   ) => {
     const audioBuffers = [];
+    const audioIds = [...new Set(sequence)]
     // buffer all necessary audio files
     await Promise.all(
       audioIds.map(async (audioId) => {
@@ -74,11 +74,11 @@ function AudioPlayer({ audioIds, BPM, sequence }) {
 
   const startAudio = () => {
     startAudioContext();
-    loadAndPlayAudioFiles(audioContext, audioIds, sequence, BPM);
+    loadAndPlayAudioFiles(audioContext, sequence, BPM);
   };
 
   useEffect(() => {
-    // use the Web Audio API to play the audio:w
+    // use the Web Audio API to play the audio
     const audioContext = new (window.AudioContext ||
       window.webkitAudioContext)();
     setAudioContext(audioContext);
