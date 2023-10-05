@@ -1,15 +1,10 @@
 import { useState, useEffect, useRef } from "react";
-import axios from "axios";
 import "./App.css";
 
 import ExerciseBuilder from "./components/ExerciseBuilder";
 import AudioPlayer from "./components/AudioPlayer";
 
-export const BACKEND_URL = "http://localhost:8000";
-
 function App() {
-  const [sequence, setSequence] = useState([]);
-
   // const addAudioId = (e) => {
   //   setAudioIds((prevAudioIds) => new Set([...prevAudioIds, e]));
   // };
@@ -18,8 +13,8 @@ function App() {
   const [BPM, setBPM] = useState(120);
   const [scale, setScale] = useState("Major");
   const [pattern, setPattern] = useState("Arpeggio Up");
-  const [low, setLow] = useState("G2");
-  const [high, setHigh] = useState("E4");
+  const [startNote, setStartNote] = useState("G2");
+  const [endNote, setEndNote] = useState("E4");
 
   const receiveBPM = (e) => {
     setBPM(e);
@@ -30,26 +25,12 @@ function App() {
   const receivePattern = (e) => {
     setPattern(e);
   };
-  const receiveLow = (e) => {
-    setLow(e);
+  const receiveStartNote = (e) => {
+    setStartNote(e);
   };
-  const receiveHigh = (e) => {
-    setHigh(e);
+  const receiveEndNote = (e) => {
+    setEndNote(e);
   };
-
-  // sequence builder
-  useEffect(() => {
-    axios
-      .get(`${BACKEND_URL}/sequence/${scale}/${pattern}/${low}/${high}`)
-      .then((sequenceResponse) => {
-        const response = sequenceResponse.data;
-        setSequence(response);
-      })
-      .catch((error) => {
-        // Handle any errors that occurred during the request
-        console.error("Axios error:", error);
-      });
-  }, [scale, pattern, low, high]);
 
   return (
     <div>
@@ -62,10 +43,16 @@ function App() {
         sendBPM={receiveBPM}
         sendScale={receiveScale}
         sendPattern={receivePattern}
-        sendLow={receiveLow}
-        sendHigh={receiveHigh}
+        sendStartNote={receiveStartNote}
+        sendEndNote={receiveEndNote}
       />
-      <AudioPlayer BPM={BPM} sequence={sequence} />
+      <AudioPlayer
+        BPM={BPM}
+        scale={scale}
+        pattern={pattern}
+        startNote={startNote}
+        endNote={endNote}
+      />
     </div>
   );
 }
