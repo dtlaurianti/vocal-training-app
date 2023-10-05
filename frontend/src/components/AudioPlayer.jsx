@@ -4,10 +4,9 @@ import { useState, useEffect } from "react";
 import AudioPreloader from "./AudioPreloader";
 
 function AudioPlayer({ BPM, sequence }) {
-  // manages the starting and stopping of audio playback loops
-  const [processes, setProcesses] = useState([]);
   // store the audio context in state
   const [audioContext, setAudioContext] = useState(null);
+  const [playback, setPlayback] = useState("stop");
 
   // Use the Web Audio API to load an audio file into an audio buffer
   const loadAudioFile = async (audioContext, audioId) => {
@@ -39,13 +38,9 @@ function AudioPlayer({ BPM, sequence }) {
   };
 
   // play audio files according to sequence and BPM
-  const loadAndPlayAudioFiles = async (
-    audioContext,
-    sequence,
-    BPM
-  ) => {
+  const loadAndPlayAudioFiles = async (audioContext, sequence, BPM) => {
     const audioBuffers = [];
-    const audioIds = [...new Set(sequence)]
+    const audioIds = [...new Set(sequence)];
     // buffer all necessary audio files
     await Promise.all(
       audioIds.map(async (audioId) => {
@@ -57,44 +52,71 @@ function AudioPlayer({ BPM, sequence }) {
     let currentTime = audioContext.currentTime + 1;
     // play the audio files in sequence
     for (let i = 0; i < sequence.length; i++) {
+      currentTime += 60 / BPM;
       const note = sequence[i];
       playAudioBuffer(audioContext, audioBuffers[note], currentTime);
-      currentTime += 60/BPM;
-    }
-  };
-
-  // start the audio context on user action, triggers useEffect
-  const startAudioContext = () => {
-    if (audioContext && audioContext.state === "suspended") {
-      audioContext.resume().then(() => {
-        console.log("AudioContext started");
-      });
     }
   };
 
   const startAudio = () => {
-    startAudioContext();
-    loadAndPlayAudioFiles(audioContext, sequence, BPM);
+    console.log("Beginning playback");
+    setPlayback("play");
+  };
+
+  const pauseAudio = () => {
+    console.log("Pausing playback");
+    setPlayback("pause");
+  };
+
+  const stopAudio = () => {
+    console.log("Stopping playback");
+    setPlayback("stop");
   };
 
   useEffect(() => {
-    // use the Web Audio API to play the audio
-    const audioContext = new (window.AudioContext ||
-      window.webkitAudioContext)();
-    setAudioContext(audioContext);
+    console.log(`UseEffect playback: ${playback}`);
+    if (playback === "stop") {
+      if (audioContext && audioContext.state !== "closed") {
+        audioContext.close();
+      }
+      setAudioContext(null);
+    } else if (playback === "pause") {
+      if (audioContext && audioContext.state === "running") {
+        audioContext.suspend();
+      }
+    } else {
+      if (audioContext && audioContext.state === "running") {
+        audioContext.close();
+        setAudioContext(null);
+      }
+      console.log("Starting audio context");
+      // use the Web Audio API to play the audio
+      setAudioContext(new AudioContext());
+    }
 
     return () => {
       // Clean up the AudioContext when the component unmounts
-      audioContext.close().catch((error) => {
+      if (audioContext && audioContext.state !== "closed") {
+      audioContext?.close().catch((error) => {
         console.error("Error closing AudioContext:", error);
-      });
-    };
-  }, []);
+      })
+    }};
+  }, [playback]);
+
+  useEffect(() => {
+    if (!audioContext) {
+      return;
+    }
+    console.dir(audioContext);
+    loadAndPlayAudioFiles(audioContext, sequence, BPM);
+  }, [audioContext]);
 
   return (
     <div>
       {/* <div>{sequence.join(', ')}</div> */}
       <button onClick={startAudio}>Play</button>
+      <button onClick={pauseAudio}>Pause</button>
+      <button onClick={stopAudio}>Stop</button>
     </div>
   );
 }

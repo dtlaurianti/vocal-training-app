@@ -1,7 +1,7 @@
 /persist/
 
 # Byte-compiled / optimized / DLL files
-__pycache__/
+**/__pycache__/
 *.py[cod]
 
 # Editor directories and files
@@ -16,4 +16,4 @@ __pycache__/
 *.sw?
 
 # venv
-/denv
+denv/
