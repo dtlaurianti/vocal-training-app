@@ -1,12 +1,14 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import axios from "../api/axios";
 
 import AudioPreloader from "./AudioPreloader";
 
-function AudioPlayer({ BPM, sequence }) {
+function AudioPlayer({ BPM, scale, pattern, startNote, endNote}) {
   // store the audio context in state
   const [audioContext, setAudioContext] = useState(null);
   const [playback, setPlayback] = useState("stop");
+  const [sequence, setSequence] = useState([]);
 
   // Use the Web Audio API to load an audio file into an audio buffer
   const loadAudioFile = async (audioContext, audioId) => {
@@ -73,6 +75,23 @@ function AudioPlayer({ BPM, sequence }) {
     setPlayback("stop");
   };
 
+  // fetch sequence from backend
+  useEffect(() => {
+    if (playback === "play") {
+    axios
+      .get(`/sequence/${scale}/${pattern}/${startNote}/${endNote}`)
+      .then((sequenceResponse) => {
+        const response = sequenceResponse.data;
+        setSequence(response);
+      })
+      .catch((error) => {
+        // Handle any errors that occurred during the request
+        console.error("Axios error:", error);
+      });
+    }
+  }, [playback]);
+
+  // set the audio context to the correct state
   useEffect(() => {
     console.log(`UseEffect playback: ${playback}`);
     if (playback === "stop") {
@@ -103,8 +122,9 @@ function AudioPlayer({ BPM, sequence }) {
     }};
   }, [playback]);
 
+  // play audio when we generate a new audio context for playback
   useEffect(() => {
-    if (!audioContext) {
+    if (!audioContext || playback !== "play") {
       return;
     }
     console.dir(audioContext);
