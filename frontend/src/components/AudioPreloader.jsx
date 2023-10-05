@@ -1,11 +1,9 @@
-import axios from "axios";
-
-import { BACKEND_URL } from "../App";
+import axios from "../api/axios";
 
 async function AudioPreloader(audioId) {
   try {
     // Fetch the audio file using Axios
-    const response = await axios.get(`${BACKEND_URL}/sample/${audioId}`, {
+    const response = await axios.get(`/sample/${audioId}`, {
       responseType: "blob",
     });
     if (response.status !== 200) {
