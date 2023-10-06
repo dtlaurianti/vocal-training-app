@@ -16,4 +16,4 @@
 *.sw?
 
 # venv
-denv/
+/denv/

@@ -34,6 +34,7 @@ def session_decorator(func):
 def parse_note_string(note: str):
     name = note[0]
     accidental = note[1:-1] if note[1:-1] else 'n'
+    accidental = "s" if accidental == "#" else accidental
     octave = int(note[-1])
     return name, accidental, octave
 
