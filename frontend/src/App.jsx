@@ -14,7 +14,7 @@ function App() {
   const [scale, setScale] = useState("Major");
   const [pattern, setPattern] = useState("Arpeggio Up");
   const [startNote, setStartNote] = useState("G2");
-  const [endNote, setEndNote] = useState("E4");
+  const [endNote, setEndNote] = useState("G3");
 
   const receiveBPM = (e) => {
     setBPM(e);

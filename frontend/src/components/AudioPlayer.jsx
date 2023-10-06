@@ -4,7 +4,7 @@ import axios from "../api/axios";
 
 import AudioPreloader from "./AudioPreloader";
 
-function AudioPlayer({ BPM, scale, pattern, startNote, endNote}) {
+function AudioPlayer({ BPM, scale, pattern, startNote, endNote }) {
   // store the audio context in state
   const [audioContext, setAudioContext] = useState(null);
   const [playback, setPlayback] = useState("stop");
@@ -61,24 +61,25 @@ function AudioPlayer({ BPM, scale, pattern, startNote, endNote}) {
   };
 
   const startAudio = () => {
-    console.log("Beginning playback");
     setPlayback("play");
   };
 
   const pauseAudio = () => {
-    console.log("Pausing playback");
     setPlayback("pause");
   };
 
   const stopAudio = () => {
-    console.log("Stopping playback");
     setPlayback("stop");
   };
 
   // fetch sequence from backend
   useEffect(() => {
     axios
-      .get(encodeURIComponent(`sequence/${scale}/${pattern}/${startNote}/${endNote}`))
+      .get(
+        encodeURIComponent(
+          `sequence/${scale}/${pattern}/${startNote}/${endNote}`
+        )
+      )
       .then((sequenceResponse) => {
         const response = sequenceResponse.data;
         setSequence(response);
@@ -87,11 +88,10 @@ function AudioPlayer({ BPM, scale, pattern, startNote, endNote}) {
         // Handle any errors that occurred during the request
         console.error("Axios error:", error);
       });
-  }, [playback]);
+  }, [scale, pattern, startNote, endNote]);
 
   // set the audio context to the correct state
   useEffect(() => {
-    console.log(`UseEffect playback: ${playback}`);
     if (playback === "stop") {
       if (audioContext && audioContext.state !== "closed") {
         audioContext.close();
@@ -106,7 +106,6 @@ function AudioPlayer({ BPM, scale, pattern, startNote, endNote}) {
         audioContext.close();
         setAudioContext(null);
       }
-      console.log("Starting audio context");
       // use the Web Audio API to play the audio
       setAudioContext(new AudioContext());
     }
@@ -114,10 +113,11 @@ function AudioPlayer({ BPM, scale, pattern, startNote, endNote}) {
     return () => {
       // Clean up the AudioContext when the component unmounts
       if (audioContext && audioContext.state !== "closed") {
-      audioContext?.close().catch((error) => {
-        console.error("Error closing AudioContext:", error);
-      })
-    }};
+        audioContext?.close().catch((error) => {
+          console.error("Error closing AudioContext:", error);
+        });
+      }
+    };
   }, [playback]);
 
   // play audio when we generate a new audio context for playback
@@ -125,16 +125,23 @@ function AudioPlayer({ BPM, scale, pattern, startNote, endNote}) {
     if (!audioContext || playback !== "play") {
       return;
     }
-    console.dir(audioContext);
     loadAndPlayAudioFiles(audioContext, sequence, BPM);
   }, [audioContext]);
 
   return (
     <div>
       {/* <div>{sequence.join(', ')}</div> */}
-      <button onClick={startAudio}>Play</button>
-      <button onClick={pauseAudio}>Pause</button>
-      <button onClick={stopAudio}>Stop</button>
+      <button onClick={startAudio} disabled={playback === "play"}>
+        Play
+      </button>
+      <button
+        onClick={pauseAudio}
+        disabled={playback === "pause" || playback === "stop"}>
+        Pause
+      </button>
+      <button onClick={stopAudio} disabled={playback === "stop"}>
+        Stop
+      </button>
     </div>
   );
 }
