@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import axios from "../api/axios";
+import Button from "react-bootstrap/Button";
 
 import AudioPreloader from "./AudioPreloader";
 
@@ -131,17 +132,17 @@ function AudioPlayer({ BPM, scale, pattern, startNote, endNote }) {
   return (
     <div>
       {/* <div>{sequence.join(', ')}</div> */}
-      <button onClick={startAudio} disabled={playback === "play"}>
+      <Button onClick={startAudio} disabled={playback === "play"} variant="dark">
         Play
-      </button>
-      <button
+      </Button>
+      <Button
         onClick={pauseAudio}
-        disabled={playback === "pause" || playback === "stop"}>
+        disabled={playback === "pause" || playback === "stop"} variant="dark">
         Pause
-      </button>
-      <button onClick={stopAudio} disabled={playback === "stop"}>
+      </Button>
+      <Button onClick={stopAudio} disabled={playback === "stop"} variant="dark">
         Stop
-      </button>
+      </Button>
     </div>
   );
 }
