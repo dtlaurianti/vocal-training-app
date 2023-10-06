@@ -32,6 +32,6 @@ def read_sample(sample_id: int):
     return sampler.get_piano_sample(sample_id)
 
 
-@app.get("/sequence/{scale}/{pattern}/{low}/{high}")
-def read_scale_sequence(scale: str, pattern: str, low: str, high: str):
-    return sequencer.generate_sequence(scale, pattern, low, high)
+@app.get("/sequence/{scale}/{pattern}/{start}/{end}")
+def read_scale_sequence(scale: str, pattern: str, start: str, end: str):
+    return sequencer.generate_sequence(scale, pattern, start, end)

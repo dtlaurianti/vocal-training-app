@@ -77,9 +77,8 @@ function AudioPlayer({ BPM, scale, pattern, startNote, endNote}) {
 
   // fetch sequence from backend
   useEffect(() => {
-    if (playback === "play") {
     axios
-      .get(`/sequence/${scale}/${pattern}/${startNote}/${endNote}`)
+      .get(encodeURIComponent(`sequence/${scale}/${pattern}/${startNote}/${endNote}`))
       .then((sequenceResponse) => {
         const response = sequenceResponse.data;
         setSequence(response);
@@ -88,7 +87,6 @@ function AudioPlayer({ BPM, scale, pattern, startNote, endNote}) {
         // Handle any errors that occurred during the request
         console.error("Axios error:", error);
       });
-    }
   }, [playback]);
 
   // set the audio context to the correct state
