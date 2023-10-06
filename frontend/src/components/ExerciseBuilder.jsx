@@ -42,13 +42,11 @@ function ExerciseBuilder({
 
   const handleStartNoteChange = (e) => {
     setStartNote(e.target.value);
-    console.log(NOTE_NAMES_MAP[e.target.value]);
     sendStartNote(NOTE_NAMES_MAP[e.target.value]);
   };
 
   const handleEndNoteChange = (e) => {
     setEndNote(e.target.value);
-    console.log(NOTE_NAMES_MAP[e.target.value]);
     sendEndNote(NOTE_NAMES_MAP[e.target.value]);
   };
 

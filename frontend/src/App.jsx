@@ -33,7 +33,7 @@ function App() {
   };
 
   return (
-    <div>
+    <div className="app-width">
       <h1>Vocal Training App</h1>
 
       {/* ID Request Form */}
